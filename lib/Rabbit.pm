@@ -36,7 +36,7 @@ Version 0.01
             "xhtml" => "http://www.w3.org/1999/xhtml"
         } },
     );
-
+    
     has 'title' => (
         isa         => 'Str',
         traits      => [qw(XPathValue)],

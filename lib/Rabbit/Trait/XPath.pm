@@ -42,6 +42,21 @@ around '_process_options' => sub {
         }
     }
 
+    #####
+    # HACK: Ian Sillitoe (2010/05/03)
+    #   added the following to avoid inherited attribute declarations in traits, e.g.
+    #      has '+lazy' => ( default => 1 );
+    #   which don't appear to work with more recent versions of Moose
+    #   (must be a nicer way of doing this, but at least the following works)
+    #####
+    $options->{lazy} = 1;
+    $options->{default} = sub { 
+            my $self = shift;
+            my $default_builder = $self->meta->get_attribute($name)->_build_default();
+            my $value = $default_builder->( $self );
+            return $value;
+        };
+    
     $self->$orig($name, $options, @rest);
 };
 
